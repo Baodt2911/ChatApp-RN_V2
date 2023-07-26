@@ -10,7 +10,7 @@ import { updateProfile } from 'firebase/auth';
 import { auth, storage } from '../../firebase';
 import { addDocument } from '../../hooks/services';
 const ChooseAvatar = ({ navigation }) => {
-    const { user: { displayName, email, uid } } = useContext(AppContext)
+    const { user: { displayName, email, uid }, setUser } = useContext(AppContext)
     const [image, setImage] = useState(null)
     const [avatar, setAvatar] = useState(null)
     const [isAvatarDefault, setIsAvatarDefault] = useState('#fff')
@@ -25,12 +25,14 @@ const ChooseAvatar = ({ navigation }) => {
             allowsEditing: true,
             quality: 1,
         });
-        setImage(result.assets[0].uri);
-        setAvatar(result.assets[0].uri)
-        setIsAvatarDefault('#fff')
-        setIsAvatarMan('#fff')
-        setIsAvatarWoman('#fff')
-        setIsContinue(true)
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+            setAvatar(result.assets[0].uri)
+            setIsAvatarDefault('#fff')
+            setIsAvatarMan('#fff')
+            setIsAvatarWoman('#fff')
+            setIsContinue(true)
+        }
     };
     const handleChooseAvatarDefault = () => {
         setAvatar(`${displayName?.charAt(0).toUpperCase()}`)
@@ -56,12 +58,28 @@ const ChooseAvatar = ({ navigation }) => {
         setImage(null)
         setIsContinue(true)
     }
+    const uriToBlob = (uri) => {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest()
+            xhr.onload = function () {
+                // return the blob
+                resolve(xhr.response)
+            }
+            xhr.onerror = function () {
+                reject(new Error('uriToBlob failed'))
+            }
+            xhr.responseType = 'blob'
+            xhr.open('GET', uri, true)
+
+            xhr.send(null)
+        })
+    }
     const handleAddDocument = async () => {
         if (isContinue) {
             setIsLoading(true)
             if (avatar.substring(0, 4) === 'file') {
-                const response = await fetch(avatar)
-                const blob = await response.blob()
+                // const response = await fetch(avatar)
+                const blob = await uriToBlob(avatar)
                 const fileName = avatar.substring(avatar.lastIndexOf('/') + 1)
                 const storageRef = ref(storage, fileName)
                 try {
@@ -70,6 +88,12 @@ const ChooseAvatar = ({ navigation }) => {
                         photoURL: `https://firebasestorage.googleapis.com/v0/b/chat-app-db76c.appspot.com/o/${fileName}?alt=media`,
                     })
                     addDocument('users', {
+                        displayName,
+                        email,
+                        photoURL: `https://firebasestorage.googleapis.com/v0/b/chat-app-db76c.appspot.com/o/${fileName}?alt=media`,
+                        uid,
+                    })
+                    setUser({
                         displayName,
                         email,
                         photoURL: `https://firebasestorage.googleapis.com/v0/b/chat-app-db76c.appspot.com/o/${fileName}?alt=media`,
@@ -88,6 +112,12 @@ const ChooseAvatar = ({ navigation }) => {
                     photoURL: avatar,
                 })
                 addDocument('users', {
+                    displayName,
+                    email,
+                    photoURL: avatar,
+                    uid,
+                })
+                setUser({
                     displayName,
                     email,
                     photoURL: avatar,

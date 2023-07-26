@@ -22,12 +22,30 @@ const CreateRoom = ({ navigation }) => {
             allowsEditing: true,
             quality: 1,
         });
-        setImageUpload(result.assets[0].uri);
+        if (!result?.canceled) {
+            setImageUpload(result.assets[0].uri);
+        }
     };
+    const uriToBlob = (uri) => {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest()
+            xhr.onload = function () {
+                // return the blob
+                resolve(xhr.response)
+            }
+            xhr.onerror = function () {
+                reject(new Error('uriToBlob failed'))
+            }
+            xhr.responseType = 'blob'
+            xhr.open('GET', uri, true)
+
+            xhr.send(null)
+        })
+    }
     const handleCreateRoom = async () => {
         setIsLoading(true)
-        const response = await fetch(imageUpload)
-        const blob = await response.blob()
+        // const response = await fetch(imageUpload)
+        const blob = await uriToBlob(imageUpload)
         const fileName = imageUpload.substring(imageUpload.lastIndexOf('/') + 1)
         const storageRef = ref(storage, fileName)
         try {

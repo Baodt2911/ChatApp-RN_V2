@@ -6,12 +6,12 @@ import { auth, } from '../../firebase'
 import { AppContext } from '../../Context/AppUser'
 const Profile = () => {
     const { user: { displayName, photoURL, email } } = useContext(AppContext)
+    console.log(photoURL);
     const alertLogout = () => {
         Alert.alert('Thông Báo', 'Bạn có muốn đăng xuất không', [
             {
-                text: 'Thoát',
+                text: 'Không',
                 onPress: () => { },
-                style: 'cancel',
             },
             { text: 'Đồng ý', onPress: () => { signOut(auth) } },
         ]);

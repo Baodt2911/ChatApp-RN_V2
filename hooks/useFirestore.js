@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { collection, query, where, orderBy, onSnapshot, limitToLast } from "firebase/firestore";
 import { db } from "../firebase";
 const useFirestore = (collectionValue, condition, sortOrder, toLastMessage) => {
-    const [data, setData] = useState([])
+    const [data, setData] = useState(null)
     useEffect(() => {
         /*condition
             {
@@ -35,9 +35,6 @@ const useFirestore = (collectionValue, condition, sortOrder, toLastMessage) => {
                 ...doc.data(),
                 id: doc.id
             }))
-            if (!document.length) {
-                return
-            }
             setData(document)
         })
         return unsubscribe

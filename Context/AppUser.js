@@ -24,7 +24,7 @@ export const AppUser = ({ children }) => {
         })
         return () => unsubscribe()
     }, [])
-    return (<AppContext.Provider value={{ user }}>
+    return (<AppContext.Provider value={{ user, setUser }}>
         {children}
     </AppContext.Provider>)
 }

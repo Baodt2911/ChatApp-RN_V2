@@ -55,23 +55,19 @@ const Login = ({ navigation }) => {
             .then((userCredential) => {
                 const user = userCredential.user
                 setIsLoading(true)
-                Alert.alert('Thông báo', `Đăng nhập thành công`, [{
-                    text: 'OK', onPress: () => {
-                        const checkIfNewUser = () => {
-                            if (user) {
-                                const creationTime = user.metadata.creationTime;
-                                const lastSignInTime = user.metadata.lastSignInTime;
-                                return creationTime == lastSignInTime
-                            }
-                        };
-                        if (checkIfNewUser() || !(user.photoURL)) {
-                            navigation.reset({
-                                index: 0,
-                                routes: [{ name: 'ChooseAvatar' }]
-                            })
-                        }
+                const checkIfNewUser = () => {
+                    if (user) {
+                        const creationTime = user.metadata.creationTime;
+                        const lastSignInTime = user.metadata.lastSignInTime;
+                        return creationTime == lastSignInTime
                     }
-                }])
+                };
+                if (checkIfNewUser() || !(user.photoURL)) {
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'ChooseAvatar' }]
+                    })
+                }
                 setTextEmail('')
                 setTextPassword('')
             }).catch((error) => {

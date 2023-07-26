@@ -1,12 +1,12 @@
 import React, { useContext, useMemo, useState } from 'react'
-import { View, Text, TouchableOpacity, TextInput, Image, Alert, ActivityIndicator } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, Image, Alert, ActivityIndicator, Modal } from 'react-native'
 import styles from './style'
 import CLOSE from '../../assets/icon/close.png'
 import { AppContext } from '../../Context/AppUser'
 import useFirestore from '../../hooks/useFirestore'
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore'
 import { db } from '../../firebase'
-const JoinRoom = ({ handleCloseJoinRoom }) => {
+const JoinRoom = ({ isVisible, handleCloseJoinRoom }) => {
     const { user: { uid } } = useContext(AppContext)
     const [roomCode, setRoomCode] = useState('')
     const [isLoading, setIsLoading] = useState(false)
@@ -34,35 +34,44 @@ const JoinRoom = ({ handleCloseJoinRoom }) => {
         } catch (error) {
             setIsLoading(false)
             setRoomCode('')
-            Alert.alert('Thông báo', 'Vui lòng kiểm tra lại mã mời', [{ text: 'OK', onPress: () => { } }])
+            Alert.alert('Thông báo', 'Vui lòng kiểm tra lại mã mời')
         }
     }
     return (
-        <View style={styles.container}>
-            <View style={styles.main}>
-                <TouchableOpacity onPress={handleCloseJoinRoom}>
-                    <Image
-                        source={CLOSE}
-                        resizeMode='contain'
-                        style={styles.close}
+        <Modal animationType='slide'
+            transparent={true}
+            visible={isVisible}
+            onRequestClose={() => handleCloseJoinRoom()}
+        >
+            <View style={styles.container}>
+                <View style={styles.main}>
+                    <TouchableOpacity onPress={() => {
+                        setRoomCode('')
+                        handleCloseJoinRoom()
+                    }}>
+                        <Image
+                            source={CLOSE}
+                            resizeMode='contain'
+                            style={styles.close}
+                        />
+                    </TouchableOpacity>
+                    <Text style={styles.title}>Nhập mã nhóm</Text>
+                    <TextInput
+                        style={styles.inputCode}
+                        placeholder='VD:HGTEAO'
+                        value={roomCode}
+                        onChangeText={text => setRoomCode(text)}
+                        maxLength={6}
                     />
-                </TouchableOpacity>
-                <Text style={styles.title}>Nhập mã nhóm</Text>
-                <TextInput
-                    style={styles.inputCode}
-                    placeholder='VD:HGTEAO'
-                    value={roomCode}
-                    onChangeText={(text) => setRoomCode(text)}
-                    maxLength={6}
-                />
-                {
-                    isLoading ? <ActivityIndicator color='gray' /> :
-                        <TouchableOpacity style={styles.btnJoinRoom} onPress={handleJoinRoom}>
-                            <Text style={styles.textBtn}>Vào nhóm</Text>
-                        </TouchableOpacity>
-                }
+                    {
+                        isLoading ? <ActivityIndicator color='gray' /> :
+                            <TouchableOpacity style={styles.btnJoinRoom} onPress={handleJoinRoom}>
+                                <Text style={styles.textBtn}>Vào nhóm</Text>
+                            </TouchableOpacity>
+                    }
+                </View>
             </View>
-        </View>
+        </Modal>
     )
 }
 

@@ -1,7 +1,8 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+const { width } = Dimensions.get("window")
 const styles = StyleSheet.create({
     itemRoom: {
-        width: 350,
+        width: width * 0.9,
         height: 70,
         flexDirection: 'row',
         alignItems: 'center',
@@ -17,7 +18,7 @@ const styles = StyleSheet.create({
         borderRadius: 100,
     },
     titleRoom: {
-        width: 250,
+        width: width * 0.6,
     },
     nameRoom: {
         fontSize: 24,
@@ -25,11 +26,13 @@ const styles = StyleSheet.create({
     },
     message: {
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        columnGap: 10
     },
     currentMessage: {
         fontSize: 16,
         fontFamily: 'SairaCondensed-Medium',
+        width: width * 0.6,
     },
     textMessage: {
         fontSize: 12,

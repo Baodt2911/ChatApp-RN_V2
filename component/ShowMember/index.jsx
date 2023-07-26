@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, FlatList, Image, ActivityIndicator } from 'reac
 import useFirestore from '../../hooks/useFirestore'
 const ShowMember = ({ route }) => {
     const { members } = route.params
-    const [isLoading, setIsLoading] = useState(true)
     const conditionMembers = useMemo(() => {
         return {
             fieldName: 'uid',
@@ -18,11 +17,6 @@ const ShowMember = ({ route }) => {
         }
     }, [])
     const dataMembers = useFirestore("users", conditionMembers, sortOderMembers, false)
-    if (dataMembers) {
-        useEffect(() => {
-            setIsLoading(false)
-        }, [])
-    }
     const renderMembers = useCallback(({ item }) =>
         <View style={styles.itemMember}>
             {
@@ -41,9 +35,9 @@ const ShowMember = ({ route }) => {
         </View>, [])
     return (
         <View style={styles.container}>
-            <Text style={styles.textHeader}>Tất cả thành viên <Text style={{ fontSize: 24, color: '#333' }}>({dataMembers.length})</Text></Text>
+            <Text style={styles.textHeader}>Tất cả thành viên <Text style={{ fontSize: 24, color: '#333' }}>({dataMembers?.length})</Text></Text>
             {
-                isLoading ? <ActivityIndicator color="gray" />
+                !dataMembers ? <ActivityIndicator color="gray" />
                     :
                     <FlatList
                         data={dataMembers}

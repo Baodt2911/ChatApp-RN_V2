@@ -24,24 +24,22 @@ export const ItemRoom = ({ roomName, photoURL, roomCode }) => {
         <TouchableOpacity style={styles.itemRoom}
             onPress={() => navigation.navigate('Chat',
                 { roomCode: roomCode, photoURL: photoURL, roomName: roomName })}>
-            {
-                photoURL ? <Image
-                    source={{ uri: `${photoURL}` }}
-                    resizeMode='cover'
-                    style={styles.imgRoom}
-                /> :
-                    <ActivityIndicator color="gray" />
-            }
+            <Image
+                source={{ uri: `${photoURL}` }}
+                resizeMode='cover'
+                style={styles.imgRoom}
+            />
             <View style={styles.titleRoom} numberOfLines={1}>
                 <Text numberOfLines={1} style={styles.nameRoom}>{roomName}</Text>
                 {
-                    !lastMessage.length ? <></> :
-                        <View style={styles.message}>
-                            <Text numberOfLines={1} style={styles.currentMessage}>{lastMessage[0]?.displayName}:
-                                <Text style={styles.textMessage} numberOfLines={1}>{lastMessage[0]?.text}</Text>
-                            </Text>
-                            <Text style={styles.timeSend}>{formatDate(lastMessage[0]?.createdAt?.seconds)}</Text>
-                        </View>
+                    !lastMessage ? <></> :
+                        lastMessage.length === 0 ? <></> :
+                            <View style={styles.message}>
+                                <Text numberOfLines={1} style={styles.currentMessage}>{lastMessage[0]?.displayName}:
+                                    <Text style={styles.textMessage} numberOfLines={1}>{lastMessage[0]?.text}</Text>
+                                </Text>
+                                <Text style={styles.timeSend}>{formatDate(lastMessage[0]?.createdAt?.seconds)}</Text>
+                            </View>
                 }
             </View>
         </TouchableOpacity>

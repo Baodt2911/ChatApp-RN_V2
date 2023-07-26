@@ -1,15 +1,10 @@
 import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
     container: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#f5f5f5cc',
-        zIndex: 2
     },
     main: {
         width: '70%',
@@ -36,7 +31,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#f5f5f5cc',
         marginHorizontal: 30,
         paddingLeft: 10,
-        textTransform: 'uppercase',
         fontFamily: 'SairaCondensed-Medium',
         letterSpacing: 2
     },

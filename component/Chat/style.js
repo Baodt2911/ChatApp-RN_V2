@@ -15,24 +15,24 @@ const styles = StyleSheet.create({
     },
     messageInput: {
         flexDirection: 'row',
-        alignItems: 'flex-end',
         gap: 5,
         paddingLeft: 20,
         paddingRight: 10,
-        paddingVertical: 10,
+        paddingTop: 10,
     },
     textInputMessage: {
         width: '90%',
+        minHeight: 40,
         maxHeight: 200,
         borderRadius: 20,
         backgroundColor: '#dadadacc',
         paddingVertical: 5,
         paddingHorizontal: 15,
+        marginBottom: 10
     },
     iconSend: {
         width: 25,
         height: 25,
-        marginBottom: 7
     },
     chat: {
         flex: 1,

@@ -2,16 +2,22 @@ import React, { useContext, useMemo, useState, useCallback } from 'react'
 import { View, FlatList, TextInput, Image, TouchableOpacity, KeyboardAvoidingView, Text } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScreenHeaderChatRight, ScreenHeaderChatLeft, MessageMember, MessageUser } from '../../assets/theme';
-import Intive from '../Invite';
 import styles from './style';
 import SEND from '../../assets/icon/send-message.png'
 import useFirestore from '../../hooks/useFirestore';
 import { AppContext } from '../../Context/AppUser';
 import { serverTimestamp } from 'firebase/firestore';
 import { addDocument } from '../../hooks/services';
+import Invite from '../Invite';
 const ChatTextInput = ({ roomCode, user }) => {
     const [textMessage, SetTextMessage] = useState('')
     const [textPlaceholder, setTextPlaceHolder] = useState('Aa')
+    const [inputHeight, setInputHeight] = useState(40);
+
+    const handleLayout = (event) => {
+        const { height } = event.nativeEvent.layout;
+        setInputHeight(height);
+    };
     const customFocusPlaceholder = () => {
         setTextPlaceHolder('Nhập tin nhắn')
     }
@@ -36,18 +42,19 @@ const ChatTextInput = ({ roomCode, user }) => {
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.messageInput}
+            style={[styles.messageInput, { alignItems: inputHeight > 60 ? 'flex-end' : 'center', }]}
         >
-            <TextInput
-                placeholder={textPlaceholder}
-                multiline
-                style={styles.textInputMessage}
-                onChangeText={(text) => SetTextMessage(text)}
-                value={textMessage}
-                onFocus={customFocusPlaceholder}
-                onBlur={customBlurPlaceholder}
-            />
-            <TouchableOpacity onPress={handleSendMessage}>
+            <View style={styles.textInputMessage} onLayout={handleLayout}>
+                <TextInput
+                    placeholder={textPlaceholder}
+                    multiline
+                    onChangeText={(text) => SetTextMessage(text)}
+                    value={textMessage}
+                    onFocus={customFocusPlaceholder}
+                    onBlur={customBlurPlaceholder}
+                />
+            </View>
+            <TouchableOpacity style={{ height: 40 }} onPress={handleSendMessage}>
                 <Image
                     source={SEND}
                     style={styles.iconSend}
@@ -65,21 +72,22 @@ const RenderMessage = ({ conditionMessage, sortOderMessage, user }) => {
             )
         }
         return (
-            <MessageMember text={item.text} displayName={item.displayName} photoURL={item.photoURL} timeSend={item.createdAt?.seconds} />
+            <MessageMember text={item.text} displayName={item.displayName} photoURL={item?.photoURL} timeSend={item.createdAt?.seconds} />
         )
     }, [user.uid])
     return (
         <View>
             {
-                !dataMessage.length ? <View style={{ height: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                    <Text style={{ fontSize: 24, fontFamily: 'SairaCondensed-SemiBold', opacity: 0.5 }}>Chưa có tin nhắn nào</Text>
-                </View> : <FlatList
-                    style={styles.mainChat}
-                    inverted
-                    data={[...dataMessage].reverse()}
-                    renderItem={renderItem}
-                    keyExtractor={item => item.id}
-                />
+                !dataMessage ? <Text style={{ fontSize: 16, fontFamily: 'SairaCondensed-SemiBold', opacity: 0.5 }}>Loading...</Text> :
+                    dataMessage.length === 0 ? <View style={{ height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                        <Text style={{ fontSize: 24, fontFamily: 'SairaCondensed-SemiBold', opacity: 0.5 }}>Chưa có tin nhắn nào</Text>
+                    </View> : <FlatList
+                        style={styles.mainChat}
+                        inverted
+                        data={[...dataMessage].reverse()}
+                        renderItem={renderItem}
+                        keyExtractor={item => item.id}
+                    />
             }
         </View>
 
@@ -105,7 +113,7 @@ const Chat = ({ route, navigation }) => {
     const members = useFirestore("rooms", conditionMessage, true, false)
     return (
         <SafeAreaView style={styles.container}>
-            {showInvite ? <Intive roomCode={roomCode} handleCloseInvite={() => setShowInvite(false)} /> : <></>}
+            <Invite isVisible={showInvite} roomCode={roomCode} handleCloseInvite={() => setShowInvite(false)} />
             <View style={styles.header}>
                 <ScreenHeaderChatLeft
                     handleBack={() => navigation.goBack()}

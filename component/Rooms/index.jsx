@@ -10,10 +10,9 @@ import useFirestore from '../../hooks/useFirestore';
 import { ItemRoom } from '../ItemRoom';
 const Rooms = ({ navigation }) => {
     const { user: { uid } } = useContext(AppContext)
-    const [isLoading, setIsLoading] = useState(true)
-    const [joinRoom, setJoinRoom] = useState(false)
+    const [isVisible, setIsVisible] = useState(false)
     const handleJoinRoom = () => {
-        setJoinRoom(true)
+        setIsVisible(!isVisible)
     }
     const conditionRoom = useMemo(() => {
         return {
@@ -29,20 +28,16 @@ const Rooms = ({ navigation }) => {
         }
     }, [])
     const roomList = useFirestore("rooms", conditionRoom, sortOderRoom, false)
-    if (roomList) {
-        useEffect(() => {
-            setIsLoading(false)
-        }, [])
-    }
-    const renderRoomList = useCallback(({ item }) =>
-        <ItemRoom
-            roomName={item.roomName}
-            roomCode={item.roomCode}
-            photoURL={item.photoURL}
-        />, [])
+    const renderRoomList = useCallback(({ item }) => {
+        return (<ItemRoom
+            roomName={item?.roomName}
+            roomCode={item?.roomCode}
+            photoURL={item?.photoURL}
+        />)
+    }, [])
     return (
         <SafeAreaView style={styles.conatiner}>
-            {joinRoom ? <JoinRoom handleCloseJoinRoom={() => setJoinRoom(false)} /> : <></>}
+            <JoinRoom isVisible={isVisible} handleCloseJoinRoom={() => setIsVisible(!isVisible)} />
             <View style={styles.header}>
                 <TouchableOpacity style={styles.btnIcon} onPress={handleJoinRoom}>
                     <Image
@@ -61,7 +56,7 @@ const Rooms = ({ navigation }) => {
                     <Text style={{ fontFamily: 'SairaCondensed-Medium', }}>Tạo nhóm</Text>
                 </TouchableOpacity>
             </View>
-            {isLoading ?
+            {!roomList ?
                 <ActivityIndicator size="large" color="gray" style={{ marginTop: 50 }} /> :
                 roomList.length === 0 ? <Text style={{ fontFamily: 'SairaCondensed-Medium', fontSize: 20, marginTop: 50 }}>Bạn chưa vào nhóm nào</Text> :
                     <FlatList style={styles.listRooms}

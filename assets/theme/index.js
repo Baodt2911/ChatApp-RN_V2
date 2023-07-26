@@ -87,7 +87,9 @@ export const MessageMember = ({ text, displayName, photoURL, timeSend }) => {
             <View>
                 <Text style={styles.nameMember}>{displayName}</Text>
                 <View style={styles.mainMessage}>
-                    <Text style={styles.messageText}>{text}</Text>
+                    <View style={styles.messageText}>
+                        <Text >{text}</Text>
+                    </View>
                     {
                         timeSend ? <Text style={styles.timeSend}>{formatDate(timeSend)}</Text> :
                             <ActivityIndicator color="gray" />
@@ -102,7 +104,9 @@ export const MessageUser = ({ text, timeSend }) => {
         <View style={styles.itemMessageActive}>
             <View>
                 <View style={styles.mainMessageActive}>
-                    <Text style={styles.messageTextActive}>{text}</Text>
+                    <View style={styles.messageTextActive}>
+                        <Text style={{ color: '#f5f5f5', }}>{text}</Text>
+                    </View>
                     {
                         timeSend ? <Text style={styles.timeSendActive}>{formatDate(timeSend)}</Text> :
                             <ActivityIndicator color="gray" />
@@ -165,7 +169,6 @@ const styles = StyleSheet.create({
     },
     messageTextActive: {
         backgroundColor: '#098295',
-        color: '#f5f5f5',
         maxWidth: '75%',
         paddingHorizontal: 10,
         paddingVertical: 10,

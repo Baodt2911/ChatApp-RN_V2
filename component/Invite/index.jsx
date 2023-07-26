@@ -1,45 +1,42 @@
 import {
-    View, Text, TouchableOpacity, StyleSheet, Image
+    View, Text, TouchableOpacity, StyleSheet, Image, Modal
 } from 'react-native'
 import React, { useState } from 'react'
 import CLOSE from '../../assets/icon/close.png'
 import * as Clipboard from 'expo-clipboard';
-const Intive = ({ roomCode, handleCloseInvite }) => {
+const Invite = ({ roomCode, handleCloseInvite, isVisible }) => {
     const [textBtn, setTextBtn] = useState('Sao chép')
     const handleCopy = async () => {
         setTextBtn('Đã sao chép')
         await Clipboard.setStringAsync(`${roomCode}:Nhập mã mời để vào nhóm của mình nhé`)
     }
     return (
-        <View style={styles.container}>
-            <View style={styles.main}>
-                <Text>Mã mời:</Text>
-                <Text style={styles.code}>{roomCode}</Text>
-                <TouchableOpacity style={styles.btnCopy} onPress={handleCopy}>
-                    <Text style={styles.textBtn}>{textBtn}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleCloseInvite}>
-                    <Image
-                        source={CLOSE}
-                        resizeMode='contain'
-                        style={styles.close}
-                    />
-                </TouchableOpacity>
+        <Modal animationType='fade' transparent={true} visible={isVisible} onRequestClose={() => handleCloseInvite()}>
+            <View style={styles.container}>
+                <View style={styles.main}>
+                    <Text>Mã mời:</Text>
+                    <Text style={styles.code}>{roomCode}</Text>
+                    <TouchableOpacity style={styles.btnCopy} onPress={handleCopy}>
+                        <Text style={styles.textBtn}>{textBtn}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={handleCloseInvite}>
+                        <Image
+                            source={CLOSE}
+                            resizeMode='contain'
+                            style={styles.close}
+                        />
+                    </TouchableOpacity>
+                </View>
             </View>
-        </View>
+        </Modal>
     )
 }
 const styles = StyleSheet.create({
     container: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        right: 0,
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#f5f5f5cc',
-        zIndex: 2
     },
     main: {
         width: '75%',
@@ -72,4 +69,4 @@ const styles = StyleSheet.create({
         fontSize: 12
     }
 })
-export default Intive
+export default Invite
