@@ -6,7 +6,6 @@ import { useNavigation } from "@react-navigation/native";
 import { addDocument } from "../hooks/services";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { WEB_CLIENT_ID } from "@env";
-import { ActivityIndicator, Platform } from "react-native";
 import messaging from "@react-native-firebase/messaging";
 import firestore from "@react-native-firebase/firestore";
 GoogleSignin.configure({
@@ -16,7 +15,6 @@ export const AppContext = createContext();
 export const AppUser = ({ children }) => {
   const navigation = useNavigation();
   const [user, setUser] = useState();
-  const [isLoading, setIsLoading] = useState(false);
   const requestUserPermission = async () => {
     const authStatus = await messaging().requestPermission();
     const enabled =
@@ -26,7 +24,6 @@ export const AppUser = ({ children }) => {
       console.log("Authorization status:", authStatus);
     }
   };
-
   useEffect(() => {
     // Check whether an initial notification is available
     messaging()
@@ -76,7 +73,7 @@ export const AppUser = ({ children }) => {
   const saveTokenToDatabase = async (token) => {
     try {
       // Assume user is already signed in
-      const uid = auth().currentUser.uid;
+      const uid = auth().currentUser?.uid;
       // Add the token to the users datastore
       await firestore()
         .collection("users")
@@ -235,11 +232,7 @@ export const AppUser = ({ children }) => {
         logout,
       }}
     >
-      {isLoading ? (
-        <ActivityIndicator color={"gray"} style={{ flex: 1 }} size={"large"} />
-      ) : (
-        children
-      )}
+      {children}
     </AppContext.Provider>
   );
 };

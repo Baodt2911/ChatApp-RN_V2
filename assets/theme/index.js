@@ -101,7 +101,7 @@ export const MessageMember = ({ text, displayName, photoURL, timeSend }) => {
           style={styles.imageUser}
         />
       )}
-      <View>
+      <View style={{ maxWidth: "75%" }}>
         <Text style={styles.nameMember}>{displayName}</Text>
         <View style={styles.mainMessage}>
           <View style={styles.messageText}>
@@ -120,7 +120,7 @@ export const MessageMember = ({ text, displayName, photoURL, timeSend }) => {
 export const MessageUser = ({ text, timeSend }) => {
   return (
     <View style={styles.itemMessageActive}>
-      <View>
+      <View style={{ maxWidth: "75%" }}>
         <View style={styles.mainMessageActive}>
           <View style={styles.messageTextActive}>
             <Text style={{ color: "#f5f5f5" }}>{text}</Text>
@@ -163,7 +163,6 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   messageText: {
-    maxWidth: "75%",
     backgroundColor: "#dadadacc",
     paddingHorizontal: 10,
     paddingVertical: 10,
@@ -172,7 +171,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 5,
   },
   timeSend: {
-    width: "20%",
     fontSize: 12,
     fontFamily: "SairaCondensed-Medium",
   },
@@ -188,7 +186,7 @@ const styles = StyleSheet.create({
   },
   messageTextActive: {
     backgroundColor: "#098295",
-    maxWidth: "75%",
+
     paddingHorizontal: 10,
     paddingVertical: 10,
     borderRadius: 15,
@@ -197,7 +195,6 @@ const styles = StyleSheet.create({
   },
   timeSendActive: {
     textAlign: "right",
-    width: "20%",
     fontSize: 12,
     fontFamily: "SairaCondensed-Medium",
   },

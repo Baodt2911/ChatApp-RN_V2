@@ -29,7 +29,9 @@ const Rooms = ({ navigation }) => {
   const [isVisibleJoinRoom, setIsVisibleJoinRoom] = useState(false);
   const [isVisibleControllerRoom, setIsVisibleControllerRoom] = useState(false);
   const [roomCode, setRoomCode] = useState("");
-  const onControllerRoom = (roomCode) => {
+  const [muteNotification, setMuteNotification] = useState("");
+  const onControllerRoom = (roomCode, muteNotification) => {
+    setMuteNotification(muteNotification);
     setRoomCode(roomCode);
     setIsVisibleControllerRoom(!isVisibleControllerRoom);
   };
@@ -53,6 +55,7 @@ const Rooms = ({ navigation }) => {
         roomName={item?.roomName}
         roomCode={item?.roomCode}
         photoURL={item?.photoURL}
+        muteNotification={item?.muteNotification}
         onLongPress={onControllerRoom}
       />
     );
@@ -111,6 +114,7 @@ const Rooms = ({ navigation }) => {
       <ControllerRoom
         isVisible={isVisibleControllerRoom}
         roomCode={roomCode}
+        muteNotification={muteNotification}
         handleCloseControllerRoom={() =>
           setIsVisibleControllerRoom(!isVisibleControllerRoom)
         }

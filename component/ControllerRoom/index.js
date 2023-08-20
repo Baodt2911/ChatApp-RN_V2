@@ -18,7 +18,12 @@ import firestore from "@react-native-firebase/firestore";
 import { AppContext } from "../../Context/AppUser";
 const TouchComponent =
   Platform.OS === "ios" ? TouchableOpacity : TouchableWithoutFeedback;
-const ControllerRoom = ({ roomCode, isVisible, handleCloseControllerRoom }) => {
+const ControllerRoom = ({
+  roomCode,
+  isVisible,
+  muteNotification,
+  handleCloseControllerRoom,
+}) => {
   const {
     user: { uid },
   } = useContext(AppContext);
@@ -42,6 +47,30 @@ const ControllerRoom = ({ roomCode, isVisible, handleCloseControllerRoom }) => {
       handleCloseControllerRoom();
     }
   };
+  const handleMuteNotification = async () => {
+    try {
+      const ref = firestore().collection("rooms").doc(getRoom[0].id);
+      await ref.update({
+        muteNotification: firestore.FieldValue.arrayUnion(uid),
+      });
+      handleCloseControllerRoom();
+    } catch (error) {
+      console.log("Mute Notification error: ", error);
+      handleCloseControllerRoom();
+    }
+  };
+  const handleRemoveMuteNotification = async () => {
+    try {
+      const ref = firestore().collection("rooms").doc(getRoom[0].id);
+      await ref.update({
+        muteNotification: firestore.FieldValue.arrayRemove(uid),
+      });
+      handleCloseControllerRoom();
+    } catch (error) {
+      console.log("Mute Notification error: ", error);
+      handleCloseControllerRoom();
+    }
+  };
   return (
     <Modal
       animationType="slide"
@@ -53,13 +82,30 @@ const ControllerRoom = ({ roomCode, isVisible, handleCloseControllerRoom }) => {
         <View style={styles.container}>
           <View style={styles.main}>
             {/* Button Mute Notification */}
-            <TouchableOpacity style={styles.btn}>
+            <TouchableOpacity
+              style={styles.btn}
+              onPress={() => {
+                {
+                  muteNotification.includes(uid)
+                    ? handleRemoveMuteNotification()
+                    : handleMuteNotification();
+                }
+              }}
+            >
               <Image
-                source={ICON_MUTE_NOTIFICATION}
+                source={
+                  muteNotification.includes(uid)
+                    ? ICON_NOTIFICATION
+                    : ICON_MUTE_NOTIFICATION
+                }
                 style={{ width: 20, height: 20 }}
                 resizeMode="contain"
               />
-              <Text style={styles.txtBtn}>Tắt thông báo</Text>
+              <Text style={styles.txtBtn}>
+                {muteNotification.includes(uid)
+                  ? "Bật thông báo"
+                  : "Tắt thông báo"}
+              </Text>
             </TouchableOpacity>
             {/* Button Leave Room */}
             <TouchableOpacity
@@ -71,7 +117,9 @@ const ControllerRoom = ({ roomCode, isVisible, handleCloseControllerRoom }) => {
                   [
                     {
                       text: "Không",
-                      onPress: () => {},
+                      onPress: () => {
+                        handleCloseControllerRoom();
+                      },
                     },
                     {
                       text: "Đồng ý",

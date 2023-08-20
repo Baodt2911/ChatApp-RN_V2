@@ -51,6 +51,7 @@ const CreateRoom = ({ navigation }) => {
         roomName: roomName,
         photoURL: url,
         members: [uid],
+        muteNotification: [],
       });
       Alert.alert("Thông báo", "Đã tạo nhóm", [
         {

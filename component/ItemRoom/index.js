@@ -5,13 +5,24 @@ import {
   Image,
   ActivityIndicator,
 } from "react-native";
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import useFirestore from "../../hooks/useFirestore";
 import { formatDate } from "../../hooks/formatDate";
 import { useNavigation } from "@react-navigation/native";
 import styles from "./style";
-export const ItemRoom = ({ roomName, photoURL, roomCode, onLongPress }) => {
+import ICON_MUTE_NOTIFICATION from "../../assets/icon/mute.png";
+import { AppContext } from "../../Context/AppUser";
+export const ItemRoom = ({
+  roomName,
+  photoURL,
+  roomCode,
+  muteNotification,
+  onLongPress,
+}) => {
   const navigation = useNavigation();
+  const {
+    user: { uid },
+  } = useContext(AppContext);
   const conditionMessage = useMemo(() => {
     return {
       fieldName: "roomCode",
@@ -34,7 +45,7 @@ export const ItemRoom = ({ roomName, photoURL, roomCode, onLongPress }) => {
   return (
     <TouchableOpacity
       style={styles.itemRoom}
-      onLongPress={() => onLongPress(roomCode)}
+      onLongPress={() => onLongPress(roomCode, muteNotification)}
       onPress={() =>
         navigation.navigate("Chat", {
           roomCode: roomCode,
@@ -69,6 +80,21 @@ export const ItemRoom = ({ roomName, photoURL, roomCode, onLongPress }) => {
           </View>
         )}
       </View>
+      {/* Mute Notification */}
+      {muteNotification.includes(uid) ? (
+        <Image
+          source={ICON_MUTE_NOTIFICATION}
+          style={[
+            styles.iconMuted,
+            {
+              marginBottom: lastMessage.length === 0 ? 0 : 20,
+            },
+          ]}
+          resizeMode="contain"
+        />
+      ) : (
+        <></>
+      )}
     </TouchableOpacity>
   );
 };
