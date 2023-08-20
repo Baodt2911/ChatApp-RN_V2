@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import { useContext, useMemo } from "react";
 import useFirestore from "../../hooks/useFirestore";
 import { formatDate } from "../../hooks/formatDate";
@@ -81,13 +75,13 @@ export const ItemRoom = ({
         )}
       </View>
       {/* Mute Notification */}
-      {muteNotification.includes(uid) ? (
+      {muteNotification?.includes(uid) ? (
         <Image
           source={ICON_MUTE_NOTIFICATION}
           style={[
             styles.iconMuted,
             {
-              marginBottom: lastMessage.length === 0 ? 0 : 20,
+              marginBottom: lastMessage?.length === 0 ? 0 : 20,
             },
           ]}
           resizeMode="contain"

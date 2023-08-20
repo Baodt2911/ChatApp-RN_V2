@@ -86,7 +86,7 @@ const ControllerRoom = ({
               style={styles.btn}
               onPress={() => {
                 {
-                  muteNotification.includes(uid)
+                  muteNotification?.includes(uid)
                     ? handleRemoveMuteNotification()
                     : handleMuteNotification();
                 }
@@ -94,7 +94,7 @@ const ControllerRoom = ({
             >
               <Image
                 source={
-                  muteNotification.includes(uid)
+                  muteNotification?.includes(uid)
                     ? ICON_NOTIFICATION
                     : ICON_MUTE_NOTIFICATION
                 }
@@ -102,7 +102,7 @@ const ControllerRoom = ({
                 resizeMode="contain"
               />
               <Text style={styles.txtBtn}>
-                {muteNotification.includes(uid)
+                {muteNotification?.includes(uid)
                   ? "Bật thông báo"
                   : "Tắt thông báo"}
               </Text>

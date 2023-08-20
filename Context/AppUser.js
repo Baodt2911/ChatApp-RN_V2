@@ -4,17 +4,17 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { LoginManager, AccessToken } from "react-native-fbsdk-next";
 import { useNavigation } from "@react-navigation/native";
 import { addDocument } from "../hooks/services";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { WEB_CLIENT_ID } from "@env";
 import messaging from "@react-native-firebase/messaging";
 import firestore from "@react-native-firebase/firestore";
+import { ActivityIndicator } from "react-native";
 GoogleSignin.configure({
   webClientId: WEB_CLIENT_ID,
 });
 export const AppContext = createContext();
 export const AppUser = ({ children }) => {
   const navigation = useNavigation();
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
   const requestUserPermission = async () => {
     const authStatus = await messaging().requestPermission();
     const enabled =
@@ -47,29 +47,6 @@ export const AppUser = ({ children }) => {
       console.log("Message handled in the background!", remoteMessage);
     });
   }, []);
-
-  const isNewDevice = async () => {
-    try {
-      // setIsLoading(true);
-      const device = await AsyncStorage.getItem("isNewDevice");
-      if (!device) {
-        // setIsLoading(false);
-        await AsyncStorage.setItem("isNewDevice", "true");
-      } else {
-        // setIsLoading(false);
-        navigation.reset({
-          index: 0,
-          routes: [{ name: "Login" }],
-        });
-      }
-    } catch (error) {
-      console.log("is new device error", error);
-    }
-  };
-  useEffect(() => {
-    isNewDevice();
-  }, []);
-
   const saveTokenToDatabase = async (token) => {
     try {
       // Assume user is already signed in
