@@ -1,44 +1,56 @@
 import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    imageUser: {
-        width: 120,
-        height: 120,
-        borderRadius: 100,
-        borderWidth: 2,
-        borderColor: '#fff',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#9DB2BF80'
-    },
-    imageText: {
-        fontFamily: 'SairaCondensed-SemiBold',
-        fontSize: 60
-    },
-    content: {
-        alignItems: 'center',
-        marginTop: 10,
-        marginBottom: 25,
-        gap: 5
-    },
-    nameUser: {
-        fontSize: 30,
-        fontWeight: '600',
-        fontFamily: 'SairaCondensed-SemiBold',
-    },
-    textEmail: {
-        fontSize: 16,
-        backgroundColor: '#dadadacc',
-        paddingHorizontal: 15,
-        paddingVertical: 5,
-        fontFamily: 'SairaCondensed-Regular',
-    },
-    btnLogout: {
-        width: 150,
-    }
-})
-export default styles
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  imageUser: {
+    width: 120,
+    height: 120,
+    borderRadius: 100,
+    borderWidth: 2,
+    borderColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#9DB2BF80",
+  },
+  imageText: {
+    fontFamily: "SairaCondensed-SemiBold",
+    fontSize: 60,
+  },
+  content: {
+    alignItems: "center",
+    marginTop: 10,
+    marginBottom: 25,
+    gap: 5,
+  },
+  nameUser: {
+    fontSize: 30,
+    fontWeight: "600",
+    fontFamily: "SairaCondensed-SemiBold",
+  },
+  textEmail: {
+    fontSize: 16,
+    backgroundColor: "#dadadacc",
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    fontFamily: "SairaCondensed-Regular",
+  },
+  btnLogout: {
+    width: 150,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
+    backgroundColor: "#0E8388",
+    elevation: 5,
+  },
+  txtBtn: {
+    fontSize: 16,
+    textTransform: "uppercase",
+    color: "#fff",
+    fontFamily: "SairaCondensed-Medium",
+  },
+});
+export default styles;

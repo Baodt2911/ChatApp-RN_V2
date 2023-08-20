@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { collection, query, where, orderBy, onSnapshot, limitToLast } from "firebase/firestore";
-import { db } from "../firebase";
+import firestore from "@react-native-firebase/firestore";
 const useFirestore = (collectionValue, condition, sortOrder, toLastMessage) => {
-    const [data, setData] = useState(null)
-    useEffect(() => {
-        /*condition
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    /*condition
             {
                 fieldName:'abc',
                 operator:'=='.
@@ -15,30 +14,38 @@ const useFirestore = (collectionValue, condition, sortOrder, toLastMessage) => {
             sort:'desc'
         }
         */
-        let collectionRef = null
-        if (condition) {
-            if (!condition.value || !condition.value.length) {
-                return
-            }
-            if (toLastMessage) {
-                collectionRef = query(collection(db, collectionValue), where(condition.fieldName, condition.operator, condition.value), orderBy(sortOrder.fieldValue, sortOrder.sort), limitToLast(1))//Get last Message
-            }
-            if (typeof sortOrder != "object") {
-                collectionRef = query(collection(db, collectionValue), where(condition.fieldName, condition.operator, condition.value))
-            }
-            else {
-                collectionRef = query(collection(db, collectionValue), where(condition.fieldName, condition.operator, condition.value), orderBy(sortOrder.fieldValue, sortOrder.sort))
-            }
-        }
-        const unsubscribe = onSnapshot(collectionRef, (snapshot) => {
-            const document = snapshot.docs.map(doc => ({
-                ...doc.data(),
-                id: doc.id
-            }))
-            setData(document)
-        })
-        return unsubscribe
-    }, [collectionValue, condition, sortOrder, toLastMessage])
-    return data
-}
-export default useFirestore
+    let collectionRef = null;
+    if (condition) {
+      if (!condition.value || !condition.value.length) {
+        return;
+      }
+      if (toLastMessage) {
+        collectionRef = firestore()
+          .collection(collectionValue)
+          .where(condition.fieldName, condition.operator, condition.value)
+          .orderBy(sortOrder.fieldValue, sortOrder.sort)
+          .limitToLast(1); //Get last Message
+      }
+      if (typeof sortOrder != "object") {
+        collectionRef = firestore()
+          .collection(collectionValue)
+          .where(condition.fieldName, condition.operator, condition.value);
+      } else {
+        collectionRef = firestore()
+          .collection(collectionValue)
+          .where(condition.fieldName, condition.operator, condition.value)
+          .orderBy(sortOrder.fieldValue, sortOrder.sort);
+      }
+    }
+    const unsubscribe = collectionRef.onSnapshot((snapshot) => {
+      const document = snapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setData(document);
+    });
+    return unsubscribe;
+  }, [collectionValue, condition, sortOrder, toLastMessage]);
+  return data;
+};
+export default useFirestore;
