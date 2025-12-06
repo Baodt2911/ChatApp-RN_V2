@@ -17,7 +17,6 @@ export default {
     ios: {
       bundleIdentifier: "com.baodt2911.Chatapp",
       supportsTablet: true,
-      // nếu bạn cũng muốn không commit plist thì có thể dùng env cho iOS tương tự
       googleServicesFile:
         process.env.GOOGLE_SERVICE_INFO_PLIST ?? "./GoogleService-Info.plist",
     },
@@ -28,7 +27,6 @@ export default {
         foregroundImage: "./assets/favicon.png",
         backgroundColor: "#ffffff",
       },
-      // CÁI QUAN TRỌNG NHẤT Ở ĐÂY:
       googleServicesFile:
         process.env.GOOGLE_SERVICES_JSON ?? "./google-services.json",
     },
@@ -44,7 +42,8 @@ export default {
     },
 
     plugins: [
-      ["@react-native-google-signin/google-signin"],
+      "@react-native-google-signin/google-signin",
+
       [
         "expo-image-picker",
         {
@@ -52,6 +51,7 @@ export default {
             "The app accesses your photos to let you share them with your friends.",
         },
       ],
+
       [
         "react-native-fbsdk-next",
         {
@@ -60,6 +60,7 @@ export default {
           displayName: "Chat app",
         },
       ],
+
       "expo-font",
     ],
   },
