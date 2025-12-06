@@ -36,7 +36,9 @@
       }
     },
     "plugins": [
-      ["@react-native-google-signin/google-signin"],
+      [
+        "@react-native-google-signin/google-signin"
+      ],
       [
         "expo-image-picker",
         {
@@ -50,7 +52,8 @@
           "clientToken": "65257bb46ef078e42610b7ed141b8687",
           "displayName": "Chat app"
         }
-      ]
+      ],
+      "expo-font"
     ]
   }
 }
