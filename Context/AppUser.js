@@ -4,12 +4,12 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { LoginManager, AccessToken } from "react-native-fbsdk-next";
 import { useNavigation } from "@react-navigation/native";
 import { addDocument } from "../hooks/services";
-import { WEB_CLIENT_ID } from "@env";
+import { EXPO_PUBLIC_WEB_CLIENT_ID } from "@env";
 import messaging from "@react-native-firebase/messaging";
 import firestore from "@react-native-firebase/firestore";
 import { ActivityIndicator } from "react-native";
 GoogleSignin.configure({
-  webClientId: WEB_CLIENT_ID,
+  webClientId: EXPO_PUBLIC_WEB_CLIENT_ID,
 });
 export const AppContext = createContext();
 export const AppUser = ({ children }) => {

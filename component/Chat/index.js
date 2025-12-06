@@ -22,7 +22,7 @@ import useFirestore from "../../hooks/useFirestore";
 import { AppContext } from "../../Context/AppUser";
 import { addDocument } from "../../hooks/services";
 import Invite from "../Invite";
-import { API_SEND_MESSAGE } from "@env";
+import { EXPO_PUBLIC_API_SEND_MESSAGE } from "@env";
 const ChatTextInput = ({ roomCode, roomName, user }) => {
   const [textMessage, SetTextMessage] = useState("");
   const [textPlaceholder, setTextPlaceHolder] = useState("Aa");
@@ -49,7 +49,7 @@ const ChatTextInput = ({ roomCode, roomName, user }) => {
           uid: user.uid,
         });
         SetTextMessage("");
-        await fetch(API_SEND_MESSAGE, {
+        await fetch(EXPO_PUBLIC_API_SEND_MESSAGE, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
