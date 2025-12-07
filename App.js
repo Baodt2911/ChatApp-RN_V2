@@ -1,4 +1,5 @@
 import React from "react";
+import "@react-native-firebase/app";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import Navigation from "./component/navigation";
